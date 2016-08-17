@@ -1,0 +1,14 @@
+{
+  "name": "bashobot",
+  "version": "0.1.0",
+  "description": "Basho chatops Bot",
+  "main": "bots.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jon Brisbin <jbrisbin@basho.com>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "botkit": "^0.2.2"
+  }
+}
