@@ -34,6 +34,9 @@ var callbacks = {
   "travisci:build": function(bot, message, cmd) {
     var branch = cmd.length == 3 ? cmd[2] : false;
     var replyMsg = "Triggered build for " + cmd[1];
+    if(branch) {
+      replyMsg += " and branch " + branch;
+    }
     if(message.subtype == "file_share") {
       replyMsg += " using overrides found in " + message.file.permalink
     }
@@ -51,12 +54,8 @@ var callbacks = {
     };
     var req = http.request(opts, function(resp) {
       var str = ''
-      resp.on('error', function(err) {
-        console.log(err);
-      });
       resp.on('data', function(chunk) { str += chunk; });
       resp.on('end', function() {
-        console.log(str);
         if(resp.statusCode != 202) {
           bot.reply(message, {
             "attachments": [
@@ -81,9 +80,18 @@ var callbacks = {
     req.on('error', function(err) {
       console.log(err);
     });
+    var reqBody = {
+      "request": {
+        "branch": "master"
+      }
+    };
     if(message.subtype == "file_share") {
-      req.write(message.file.preview);
+      reqBody = JSON.parse(message.file.preview);
     }
+    if(branch) {
+      reqBody.request.branch = branch;
+    }
+    req.write(JSON.stringify(reqBody));
     req.end();
   }
 }
@@ -92,12 +100,16 @@ controller.on(['file_share', 'direct_message', 'direct_mention'], function(bot, 
   //console.log(JSON.stringify(message, undefined, 2));
   var cmd = [];
   if(message.subtype == "file_share") {
-    cmd = message.file.initial_comment.comment.split(' ')
+    cmd = message.file.initial_comment.comment.trim().split(' ')
+    if(cmd[0].startsWith('<@')) {
+      cmd.shift();
+    }
   } else if(message.text) {
-    cmd = message.text.split(' ')
+    cmd = message.text.trim().split(' ')
   } else {
     return;
   }
 
+  console.log(JSON.stringify(cmd));
   callbacks[cmd[0]](bot, message, cmd);
 });
