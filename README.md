@@ -27,4 +27,4 @@ It should automatically join. Then you can direct mention the bot.
 
 `@bashobot` interacts with Travis CI using the secure REST API. It supports the following commands:
 
-- `travisci:build org/repo [branch]` - Manually trigger a build of _org/repo_ on Travis CI. Optionally pass a branch name. If you need to pass a full JSON document to override elements of your build configuration (as shown in the [Travis CI REST API docs for triggering a build](https://docs.travis-ci.com/user/triggering-builds)), send that JSON as a snippet in a direct message.
+- `travisci:build org/repo [branch]` - Manually trigger a build of _org/repo_ on Travis CI. Optionally pass a branch name. If you need to pass a full JSON document to override elements of your build configuration (as shown in the [Travis CI REST API docs for triggering a build](https://docs.travis-ci.com/user/triggering-builds)), send that JSON as a snippet in a direct message and in the "comment" section of the snippet, mention the `@bashobot` with the appropriate command e.g. `@bashobot travisci:build org/repo`.
